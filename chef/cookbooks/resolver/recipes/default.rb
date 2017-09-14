@@ -31,6 +31,10 @@ end
 
 dns_list << node[:dns][:nameservers]
 dns_list.flatten!
+if dns_list.empty?
+  # better fail than leave the node with a broken DNS config
+  raise "List of DNS servers is empty"
+end
 
 unless node[:platform_family] == "windows"
   package "dnsmasq"
