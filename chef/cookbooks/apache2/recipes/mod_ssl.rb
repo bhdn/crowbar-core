@@ -36,13 +36,6 @@ if node[:platform_family] == "suse"
   apache_module "version"
 end
 
-unless node[:apache][:listen_ports].include?("443")
-  # override the resource defined in default.rb; we don't want to create the
-  # resource again, otherwise we will write the file twice
-  resource = resources(template: "#{node[:apache][:dir]}/ports.conf")
-  resource.variables({apache_listen_ports: [node[:apache][:listen_ports], "443"].flatten})
-end
-
 apache_module "ssl" do
   conf true
 end
